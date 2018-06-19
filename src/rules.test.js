@@ -293,25 +293,25 @@ describe('rules', () => {
     })
   })
 
-  describe('equalsField', () => {
-    it('should return true due to same value', () => {
-      assert.equal(
-        rules.equalsField('Bob', 'form.firstname', () => {
-          return 'Bob'
-        }),
-        true
-      )
-    })
-
-    it('should return false due to not same value', () => {
-      assert.equal(
-        rules.equalsField('Bobby', 'form.firstname', () => {
-          return 'Bo'
-        }),
-        false
-      )
-    })
-  })
+  // describe('equalsField', () => {
+  //   it('should return true due to same value', () => {
+  //     assert.equal(
+  //       rules.equalsField('Bob', 'form.firstname', () => {
+  //         return 'Bob'
+  //       }),
+  //       true
+  //     )
+  //   })
+  //
+  //   it('should return false due to not same value', () => {
+  //     assert.equal(
+  //       rules.equalsField('Bobby', 'form.firstname', () => {
+  //         return 'Bo'
+  //       }),
+  //       false
+  //     )
+  //   })
+  // })
 
   describe('maxLength', () => {
     it('should return true due to length < 5', () => {

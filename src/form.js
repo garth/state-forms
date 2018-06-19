@@ -7,9 +7,9 @@ function createFields(form) {
   return Object.keys(form).reduce((fields, key) => {
     if (form[key] === Object(form[key])) {
       if ('value' in form[key]) {
-        fields[key] = new Field(form[key], form)
+        fields[key] = new Field(form[key], true)
       } else {
-        fields[key] = createFields(form[key], form)
+        fields[key] = createFields(form[key])
       }
     } else {
       fields[key] = form[key]
@@ -20,26 +20,29 @@ function createFields(form) {
 }
 
 export class Field {
-  constructor(field) {
+  constructor(field, skipValidate) {
     Object.assign(this, field, {
       isPristine: typeof field.isPristine === 'undefined' ? true : field.isPristine
     })
+    if (!skipValidate) {
+      this.isValid = this._validate()
+    }
   }
-  _validate(get) {
-    return Object.assign(this, runValidation(this, get)).isValid
+  _validate() {
+    return Object.assign(this, runValidation(this)).isValid
   }
 }
 
 export class Form {
-  constructor(form, get) {
+  constructor(form) {
     Object.assign(this, createFields(form))
-    this.isValid = this._validate(get)
+    this.isValid = this._validate()
   }
-  _validate(get) {
+  _validate() {
     function validate(obj) {
       return Object.keys(obj).reduce((isValid, field) => {
         if (obj[field] instanceof Field) {
-          const isFieldValid = obj[field]._validate(get)
+          const isFieldValid = obj[field]._validate()
 
           return isValid ? isFieldValid : false
         } else if (obj[field] === Object(obj[field])) {
@@ -65,25 +68,21 @@ export class Form {
   }
 }
 
-export function computedField(fieldValueTag) {
-  return Compute(fieldValueTag, (fieldValue, get) => {
-    if (!fieldValue || typeof fieldValue !== 'object') {
-      console.warn(`Cerebral Forms - Field value: ${fieldValueTag} did not resolve to an object`)
-      return {}
-    }
-    const field = new Field(fieldValue)
-    field._validate(get)
-    return field
-  })
-}
-
-export default function computedForm(formValueTag) {
-  return Compute(formValueTag, (formValue, get) => {
-    if (!formValue || typeof formValue !== 'object') {
-      console.warn(`Cerebral Forms - Form value: ${formValueTag} did not resolve to an object`)
-      return {}
-    }
-
-    return new Form(formValue, get)
-  })
-}
+// export function field(fieldValue) {
+//   if (!fieldValue || typeof fieldValue !== 'object') {
+//     console.warn(`Forms - Field value is not an object`)
+//     return {}
+//   }
+//   const field = new Field(fieldValue)
+//   field._validate()
+//   return field
+// }
+//
+// export default function form(formValue) {
+//   if (!formValue || typeof formValue !== 'object') {
+//     console.warn(`Forms - Form value is not an object`)
+//     return {}
+//   }
+//
+//   return new Form(formValue)
+// }

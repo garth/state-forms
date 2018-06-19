@@ -1,8 +1,8 @@
 import rules from '../rules.js'
 
-export default function validate(value, validationRules = [], get) {
+export default function validate(value, validationRules = []) {
   const initialValidation = {
-    isValid: true,
+    isValid: true
   }
 
   return validationRules.reduce((result, validationRule, index) => {
@@ -10,10 +10,7 @@ export default function validate(value, validationRules = [], get) {
       return result
     }
 
-    const ruleArray =
-      validationRule instanceof RegExp
-        ? ['regexp']
-        : validationRule.split(/:(.+)?/)
+    const ruleArray = validationRule instanceof RegExp ? ['regexp'] : validationRule.split(/:(.+)?/)
     const ruleKey = ruleArray[0]
     const rule =
       rules[ruleKey] ||
@@ -34,7 +31,7 @@ export default function validate(value, validationRules = [], get) {
       arg = undefined
     }
 
-    const isValid = rule(value, arg, get)
+    const isValid = rule(value, arg)
 
     return isValid
       ? initialValidation
@@ -42,11 +39,9 @@ export default function validate(value, validationRules = [], get) {
           isValid,
           failedRule: {
             name: ruleKey,
-            arg,
+            arg
           },
-          errorMessage: rules._errorMessages[ruleKey]
-            ? rules._errorMessages[ruleKey](value, arg)
-            : null,
+          errorMessage: rules._errorMessages[ruleKey] ? rules._errorMessages[ruleKey](value, arg) : null
         }
   }, initialValidation)
 }

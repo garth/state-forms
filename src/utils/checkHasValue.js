@@ -1,6 +1,6 @@
 import validate from './validate'
 
-export default function checkHasValue(value, isValueRules, get) {
-  const result = validate(value, isValueRules, get)
+export default function checkHasValue(value, isValueRules) {
+  const result = validate(value, isValueRules)
   return result.isValid
 }

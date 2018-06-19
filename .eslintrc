@@ -1,0 +1,31 @@
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "extends": [
+    "standard",
+    "plugin:react/recommended",
+    "plugin:jest/recommended",
+    "plugin:import/recommended",
+    "prettier",
+    "prettier/react",
+    "prettier/standard"
+  ],
+  "plugins": [
+    "react",
+    "jest",
+    "import",
+    "prettier",
+    "standard"
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "react/prop-types": 0
+  }
+}

@@ -1,5 +1,4 @@
 /* eslint-disable no-useless-escape, no-control-regex */
-import { state } from 'cerebral/tags'
 
 const rules = {
   _errorMessages: {},
@@ -59,10 +58,7 @@ const rules = {
     return rules.regexp(value, /^(?:[-+]?(?:0|[1-9]\d*))$/)
   },
   isFloat(value) {
-    return rules.regexp(
-      value,
-      /^(?:[-+]?(?:\d+))?(?:\.\d*)?(?:[eE][\+\-]?(?:\d+))?$/
-    )
+    return rules.regexp(value, /^(?:[-+]?(?:\d+))?(?:\.\d*)?(?:[eE][\+\-]?(?:\d+))?$/)
   },
   isWords(value) {
     return rules.regexp(value, /^[A-Z\s]+$/i)
@@ -76,17 +72,15 @@ const rules = {
   equals(value, eql) {
     return value === eql
   },
-  equalsField(value, field, get) {
-    return value === get(state`${field}.value`)
-  },
+  // equalsField(value, field, get) {
+  //   return value === get(state`${field}.value`)
+  // },
   maxLength(value, length) {
     return !rules.isExisty(value) || value.length <= length
   },
   minLength(value, length) {
-    return (
-      !rules.isExisty(value) || rules.isEmpty(value) || value.length >= length
-    )
-  },
+    return !rules.isExisty(value) || rules.isEmpty(value) || value.length >= length
+  }
 }
 
 export default rules

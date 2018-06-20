@@ -1,6 +1,8 @@
 # state-forms
 
-A computed form - orignally @cerebral/forms
+A computed form - originally @cerebral/forms
+
+> Migrating from @cerebral/forms? See the migration guide at the bottom of this readme.
 
 ## Install
 
@@ -11,8 +13,6 @@ A computed form - orignally @cerebral/forms
 ## Description
 
 Forms are one of the most complex state management challenges out there. Before Cerebral was created I spent a lot of time developing [formsy-react](https://github.com/formsy/formsy-react), which is a library that tries to solve forms with internal state. With the release of Cerebral we got a chance to explore the space of solving forms complexity with external state instead. To this day I have a hard time recommending a solution and you should **not** see this lib as "the official way of managing forms with Cerebral". There is nothing wrong thinking of a form as a very complex input where you only pass data into Cerebral on the submit of the form.
-
-> Migrating from @cerebral/forms, see the migration guide at the bottom of this readme.
 
 ## Instantiate
 
@@ -208,34 +208,15 @@ You can nest this however you want, even with array:
 }
 ```
 
-## provider
-
-You can also access your forms in actions.
-
-```js
-function myAction({ forms }) {
-  const form = forms.get('path.to.form')
-}
-```
-
-### reset
-
-Reset the form to its default values (or empty string by default).
-
-```js
-function myAction({ forms }) {
-  forms.reset('path.to.form')
-}
-```
+## helpers
 
 ### toJSON
 
 Typically you want to convert your forms to a plain value structure.
 
 ```js
-function myAction({ forms }) {
-  const form = forms.toJSON('path.to.form')
-}
+import formToJSON from 'state-forms/lib/helpers/formToJSON'
+const form = formToJSON(myForm)
 ```
 
 This form will now have the structure of:
@@ -248,6 +229,15 @@ This form will now have the structure of:
     zipCode: 'zip code value'
   }
 }
+```
+
+### resetForm
+
+Reset a form to to the default values
+
+```js
+import resetForm from 'state-forms/lib/helpers/resetForm'
+const form = resetForm(myForm)
 ```
 
 ### updateErrorMessages
@@ -700,12 +690,14 @@ import { Controller, Module, Provider } from 'cerebral' // after
 // import FormsProvider from '@cerebral/forms' // before
 import Forms from 'state-forms' // after
 
-export default Controller({
-  providers: {
-    // forms: FormsProvider({}) // before
-    forms: Provider(Forms({})) // after
-  }
-})
+export default Controller(
+  Module({
+    providers: {
+      // forms: FormsProvider({}) // before
+      forms: Provider(Forms({})) // after
+    }
+  })
+)
 ```
 
 An example connected component:

@@ -1,8 +1,9 @@
 import rules from './rules'
-// import resetForm from './helpers/resetForm'
-// import formToJSON from './helpers/formToJSON'
+import { Field, Form } from './form'
 export { default as rules } from './rules'
-// export { Field, Form } from './form'
+
+export const form = form => new Form(form)
+export const field = field => new Field(field)
 
 function Forms(options = {}) {
   if (options.rules) {
@@ -14,15 +15,6 @@ function Forms(options = {}) {
   }
 
   return {
-    // get(path) {
-    //   return this.context.resolve.value(form(state`${path}`))
-    // },
-    // reset(path) {
-    //   this.context.state.set(path, resetForm(this.context.state.get(path)))
-    // },
-    // toJSON(path) {
-    //   return formToJSON(this.context.state.get(path))
-    // },
     updateRules(newRules) {
       Object.assign(rules, newRules)
     },

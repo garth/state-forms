@@ -20,8 +20,8 @@ import Forms from 'state-forms'
 
 const controller = Controller({
   providers: [
-    new Provider(
-      new Forms({
+    Provider(
+      Forms({
         // Add additional rules
         rules: {
           myAddedRule(value, arg, get) {

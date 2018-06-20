@@ -10,56 +10,59 @@ A computed form - orignally @cerebral/forms
 
 ## Description
 
-Forms are one of the most complex state management challenges out there. Before Cerebral was created I spent a lot of time developing [formsy-react](https://github.com/formsy/formsy-react), which is a library that tries to solve forms with internal state. With the release of Cerebral we got a chance to explore the space of solving forms complexity with external state instead. To this day I have a hard time recommending a solution and you should **not** see this addon as "the official way of managing forms with Cerebral". There is nothing wrong thinking of a form as a very complex input where you only pass data into Cerebral on the submit of the form.
+Forms are one of the most complex state management challenges out there. Before Cerebral was created I spent a lot of time developing [formsy-react](https://github.com/formsy/formsy-react), which is a library that tries to solve forms with internal state. With the release of Cerebral we got a chance to explore the space of solving forms complexity with external state instead. To this day I have a hard time recommending a solution and you should **not** see this lib as "the official way of managing forms with Cerebral". There is nothing wrong thinking of a form as a very complex input where you only pass data into Cerebral on the submit of the form.
 
 ## Instantiate
 
-```javascript
-import { Controller } from 'cerebral'
-import FormsProvider from '@cerebral/forms'
+```js
+import { Controller, Provider } from 'cerebral'
+import Forms from 'state-forms'
 
 const controller = Controller({
   providers: [
-    FormsProvider({
-      // Add additional rules
-      rules: {
-        myAddedRule(value, arg, get) {
-          // value of the field
-          value
-          // arg passed to the rule
-          arg
-          // The "get" argument from computed. Use it to grab
-          // state or props passed to component. The component
-          // will track use of these dependencies for rerender
-          get
+    new Provider(
+      new Forms({
+        // Add additional rules
+        rules: {
+          myAddedRule(value, arg, get) {
+            // value of the field
+            value
+            // arg passed to the rule
+            arg
+            // The "get" argument from computed. Use it to grab
+            // state or props passed to component. The component
+            // will track use of these dependencies for rerender
+            get
 
-          return true
-        }
-      },
+            return true
+          }
+        },
 
-      // errorMessage property added to field when invalid with the following rules
-      errorMessages: {
-        minLength(value, minLength) {
-          return `The length is ${value.length}, should be equal or more than ${minLength}`
+        // errorMessage property added to field when invalid with the following rules
+        errorMessages: {
+          minLength(value, minLength) {
+            return `The length is ${value.length}, should be equal or more than ${minLength}`
+          }
         }
-      }
-    })
+      })
+    )
   ]
 })
 ```
 
 ## compute
 
-To use a form you use the **form** computed, pointing to the form. Typically:
+To use a form you use the **form** function to generate computed form state. Typically:
 
 ```js
 import React from 'react'
+import { Compute } from 'cerebral'
 import { connect } from '@cerebral/react'
-import { form } from '@cerebral/forms'
+import { form } from 'state-forms'
 
 export default connect(
   {
-    form: form(state`path.to.form`)
+    form: Compute(state`path.to.form`, form)
   },
   function MyForm({ form }) {
     // Value of some field
@@ -88,12 +91,13 @@ You can also use the **field** computed, pointing to the field. This will optimi
 
 ```js
 import React from 'react'
+import { compute } from 'cerebral'
 import { connect } from '@cerebral/react'
-import { field } from '@cerebral/forms'
+import { field } from 'state-forms'
 
 export default connect(
   {
-    field: field(state`path.to.form.name`)
+    field: Compute(state`path.to.form.name`, field)
   },
   function MyField({ field }) {
     // Value of some field
@@ -200,47 +204,6 @@ You can nest this however you want, even with array:
     }
   }
 }
-```
-
-## operators
-
-### isValidForm
-
-Diverge execution based on validity of a form.
-
-```js
-import { state } from 'cerebral/tags'
-import { isValidForm } from '@cerebral/forms/operators'
-
-export default [
-  isValidForm(state`my.form`),
-  {
-    true: [],
-    false: []
-  }
-]
-```
-
-### resetForm
-
-Reset a form.
-
-```js
-import { state } from 'cerebral/tags'
-import { resetForm } from '@cerebral/forms/operators'
-
-export default [resetForm(state`my.form`)]
-```
-
-### setField
-
-When you change the value of a field you will need to use this operator. Note that you point to the field, not the field value.
-
-```js
-import { state, props } from 'cerebral/tags'
-import { setField } from '@cerebral/forms/operators'
-
-export default [setField(state`my.form.field`, props`value`)]
 ```
 
 ## provider

@@ -1,10 +1,12 @@
-# @cerebral/forms
+# state-forms
+
+A computed form - orignally @cerebral/forms
 
 ## Install
 
 **NPM**
 
-`npm install @cerebral/forms`
+`npm install state-forms`
 
 ## Description
 
@@ -38,9 +40,7 @@ const controller = Controller({
       // errorMessage property added to field when invalid with the following rules
       errorMessages: {
         minLength(value, minLength) {
-          return `The length is ${
-            value.length
-          }, should be equal or more than ${minLength}`
+          return `The length is ${value.length}, should be equal or more than ${minLength}`
         }
       }
     })

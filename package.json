@@ -1,7 +1,7 @@
 {
-  "name": "@cerebral/forms",
-  "version": "0.0.0-next",
-  "description": "A computed form",
+  "name": "state-forms",
+  "version": "0.0.1",
+  "description": "A computed form - orignally @cerebral/forms",
   "main": "lib/index.js",
   "typings": "./index.d.ts",
   "scripts": {
@@ -15,15 +15,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cerebral/cerebral.git"
+    "url": "git+https://github.com/garth/state-forms.git"
   },
   "keywords": ["forms"],
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cerebral/cerebral/issues"
+    "url": "https://github.com/garth/state-forms/issues"
   },
-  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/forms#readme",
+  "homepage": "https://github.com/garth/state-forms#readme",
   "dependencies": {},
   "nyc": {
     "exclude": ["node_modules", "lib", "tests", "**/*.test.js", "**/testHelper.js"]

@@ -12,6 +12,8 @@ A computed form - orignally @cerebral/forms
 
 Forms are one of the most complex state management challenges out there. Before Cerebral was created I spent a lot of time developing [formsy-react](https://github.com/formsy/formsy-react), which is a library that tries to solve forms with internal state. With the release of Cerebral we got a chance to explore the space of solving forms complexity with external state instead. To this day I have a hard time recommending a solution and you should **not** see this lib as "the official way of managing forms with Cerebral". There is nothing wrong thinking of a form as a very complex input where you only pass data into Cerebral on the submit of the form.
 
+> Migrating from @cerebral/forms, see the migration guide at the bottom of this readme.
+
 ## Instantiate
 
 ```js
@@ -684,4 +686,78 @@ You add validation rules on the field:
     validationRules: [/foo/]
   }
 }
+```
+
+## Migrating from @cerebral/forms
+
+since state-forms does not depend on Cerebral it does not use Providers or Computes, but you can wrap state-forms functions in Providers and Computes for the same effect.
+
+An example Cerebral controller:
+
+```js
+// import { Controller, Module } from 'cerebral' // before
+import { Controller, Module, Provider } from 'cerebral' // after
+// import FormsProvider from '@cerebral/forms' // before
+import Forms from 'state-forms' // after
+
+export default Controller({
+  providers: {
+    // forms: FormsProvider({}) // before
+    forms: Provider(Forms({})) // after
+  }
+})
+```
+
+An example connected component:
+
+```js
+import { Compute } from 'cerebral' // added
+// import { form } from '@cerebral/forms' // before
+import { form } from 'state-forms' // after
+
+export default connect(
+  {
+    // myForm: form(state`myForm`) // before
+    myForm: Compute(state`myForm`, form) // after
+  },
+  MyComponent
+)
+```
+
+state-forms does not contain any Cerebral operators, but it does has the helpers that are needed to create your own.
+
+### isValidForm.js
+
+```js
+import { form } from 'state-forms'
+
+export default formPath =>
+  function isValidForm({ state, path, resolve }) {
+    const formValue = form(resolve.value(formPath))
+    return formValue.isValid ? path.true() : path.false()
+  }
+```
+
+### resetForm.js
+
+```js
+import resetFormHelper from 'state-forms/lib/helpers/resetForm'
+
+export default formPath =>
+  function resetForm({ state, resolve }) {
+    const path = resolve.path(formPath)
+    state.set(path, resetFormHelper(state.get(path)))
+  }
+```
+
+### setField.js
+
+```js
+export default (fieldPath, fieldValue) => {
+   function setField({ state, resolve }) {
+    state.merge(resolve.path(fieldPath), {
+      value: resolve.value(fieldValue),
+      isPristine: false
+    })
+  }
 ```

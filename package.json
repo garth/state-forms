@@ -1,6 +1,6 @@
 {
   "name": "state-forms",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "A computed form - orignally @cerebral/forms",
   "main": "lib/index.js",
   "typings": "./index.d.ts",

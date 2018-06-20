@@ -716,6 +716,18 @@ export default connect(
 )
 ```
 
+An example action:
+
+```js
+import formToJSON from 'state-forms/lib/helpers/formToJSON' // after
+
+// export default function myAction({ forms }) { // before
+export default function myAction({ state }) {
+  // const form = forms.toJSON('trainingCycle.trainingCycleForm') // before
+  const form = formToJSON(state.get('trainingCycle.trainingCycleForm')) // after
+}
+```
+
 state-forms does not contain any Cerebral operators, but it does has the helpers that are needed to create your own.
 
 ### isValidForm.js

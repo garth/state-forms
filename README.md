@@ -757,8 +757,8 @@ export default formPath =>
 ### setField.js
 
 ```js
-export default (fieldPath, fieldValue) => {
-   function setField({ state, resolve }) {
+export default (fieldPath, fieldValue) =>
+  function setField({ state, resolve }) {
     state.merge(resolve.path(fieldPath), {
       value: resolve.value(fieldValue),
       isPristine: false
